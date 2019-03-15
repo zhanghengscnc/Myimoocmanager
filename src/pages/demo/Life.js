@@ -1,6 +1,10 @@
 import React from 'react';
 import Child from './Child';
-import content from './index.less';
+import  './index.less';
+import {Button} from 'antd'
+//import 'antd/dist/antd.css'
+
+
 
 export default class Life extends React.Component {
     constructor(props) {
@@ -32,7 +36,7 @@ export default class Life extends React.Component {
         return (
             <div className="content">
                 <p>React life</p>
-                <button onClick={this.handleAdd.bind(this)}>点我一下1</button>
+                <Button onClick={this.handleAdd.bind(this)}>点我一下1</Button>
                 <button onClick={this.handleAdd2}>点我一下2</button>
                     <p>{this.state.count}</p>
                 <Child name={this.state.name}/>
