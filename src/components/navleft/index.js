@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
 import menuList from "./../../config/menuList";
 import {Menu, Icon} from 'antd';
 //import './../../style/common.less'
@@ -32,7 +33,9 @@ export default class NavLeft extends React.Component {
                         </SubMenu>
                     )
                 }
-                return <Item key={item.key}>{item.title}</Item>
+                return <Item key={item.key}>
+                    <Link to={item.key}>{item.title}</Link>
+                </Item>
             }
         });
     }
@@ -45,7 +48,7 @@ export default class NavLeft extends React.Component {
                     <h1>IMoos MS</h1>
                 </div>
                 <div className="">
-                    <Menu theme='dark' >
+                    <Menu theme='dark'>
                         {this.state.menuTreeNode}
                     </Menu>
                 </div>

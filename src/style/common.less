@@ -1,3 +1,5 @@
+@import './../style/default.less';
+
 .container {
   .nav-left {
     color: #ffffff;
@@ -6,10 +8,13 @@
     // background-color:red;
   }
   .main {
-    height: calc(100vh)
+    background-color: @colorL;
+    height: calc(100vh);
+    overflow: auto;
+    padding: 10px 20px;
   }
   .content {
     position: relative;
-    padding: 20px;
+    padding: 20px 20px;
   }
 }
