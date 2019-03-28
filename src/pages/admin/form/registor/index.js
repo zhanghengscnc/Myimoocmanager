@@ -1,27 +1,65 @@
 import React from 'react';
-import {Card, Form, Input, Button, Icon, Checkbox, Radio,InputNumber,Select,Switch,DatePicker,TimePicker,message,Upload} from 'antd';
+import {
+    Card,
+    Form,
+    Input,
+    Button,
+    Icon,
+    Checkbox,
+    Radio,
+    InputNumber,
+    Select,
+    Switch,
+    DatePicker,
+    TimePicker,
+    message,
+    Upload
+} from 'antd';
 import moment from 'moment';
+
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
 const Option = Select.Option;
 const TextArea = Input.TextArea;
 
 
-
 class RegistorFrom extends React.Component {
-    handleSubmit=()=>{
-        let data = this.props.form.getFieldValue();
+    state={
+
+    };
+    handleSubmit = () => {
+        let data = this.props.form.getFieldsValue();
         debugger;
         //console.log("data:", data);
         this.props.form.validateFields(((erros, values) => {
             //console.log("validateFields values:",values);
             if (!erros) {
                 debugger;
-               // console.log(JSON.stringify(data))
+                // console.log(JSON.stringify(data))
                 message.success(`${data.userName}您好！注册成功！`)
             }
         }))
     };
+    handleChange = (info) => {
+        if (info.file.status === 'uploading') {
+            this.setState({loading: true});
+            return;
+        }
+        if (info.file.status === 'done') {
+            // Get this url from response in real world.
+            this.getBase64(info.file.originFileObj, imageUrl => this.setState({
+                userImg:imageUrl,
+                loading: false,
+            }));
+        }
+    };
+
+    getBase64 = (img, callback) => {
+        const reader = new FileReader();
+        reader.addEventListener('load', () => callback(reader.result));
+        reader.readAsDataURL(img);
+    };
+
 
     render() {
         const {getFieldDecorator} = this.props.form;
@@ -35,15 +73,15 @@ class RegistorFrom extends React.Component {
                 sm: 8
             }
         };
-        const offsetLayout= {
-            wrapperCol:{
-                xs:24,
-                sm:{
-                    span:8,
-                    offset:4
+        const offsetLayout = {
+            wrapperCol: {
+                xs: 24,
+                sm: {
+                    span: 8,
+                    offset: 4
                 }
             }
-        }
+        };
         return (
             <div>
                 <Card title="表单注册" style={{marginTop: 10}}>
@@ -62,7 +100,7 @@ class RegistorFrom extends React.Component {
                                 getFieldDecorator("password", {
                                     rules: [{required: true}]
                                 })(
-                                    <Input.Password  placeholder="请输入密码" key={"aa"}/>
+                                    <Input.Password placeholder={"请输入密码"} key={"aa"}/>
                                 )
                             }
                         </FormItem>
@@ -81,7 +119,7 @@ class RegistorFrom extends React.Component {
                         <FormItem label="年龄">
                             {
                                 getFieldDecorator("age", {
-                                    initialValue:0,
+                                    initialValue: 0,
                                 })(
                                     <InputNumber min={0} max={100}/>
                                 )
@@ -89,8 +127,8 @@ class RegistorFrom extends React.Component {
                         </FormItem>
                         <FormItem label={"当前状态"}>
                             {
-                                getFieldDecorator("currentStatus",{
-                                    initialValue:1
+                                getFieldDecorator("currentStatus", {
+                                    initialValue: 1
 
                                 })(
                                     <Select>
@@ -104,8 +142,8 @@ class RegistorFrom extends React.Component {
                         </FormItem>
                         <FormItem label={"区域"}>
                             {
-                                getFieldDecorator("area",{
-                                    initialValue:["北京","深圳"]
+                                getFieldDecorator("area", {
+                                    initialValue: ["北京", "深圳"]
                                 })(
                                     <Select mode={"multiple"}>
                                         <Option key={1} value={"四川"}>四川</Option>
@@ -119,8 +157,8 @@ class RegistorFrom extends React.Component {
                         </FormItem>
                         <FormItem label={"婚否"}>
                             {
-                                getFieldDecorator("isMarried",{
-                                    initialValue:1
+                                getFieldDecorator("isMarried", {
+                                    initialValue: 1
                                 })(
                                     <RadioGroup>
                                         <Radio value={1}>
@@ -135,7 +173,7 @@ class RegistorFrom extends React.Component {
                         </FormItem>
                         <FormItem label={"是否成年"}>
                             {
-                                getFieldDecorator("isAdult",{
+                                getFieldDecorator("isAdult", {
                                     /*valuePropName:"checked",
                                     initialValue:true*/
                                 })(
@@ -145,30 +183,27 @@ class RegistorFrom extends React.Component {
                             }
                         </FormItem>
                         <FormItem label={"生日"}>
-                            {getFieldDecorator("birthday",{
-                                initialValue:moment('2018-01-01 00:00:00')
+                            {getFieldDecorator("birthday", {
+                                initialValue: moment('2018-01-01 00:00:00')
 
                             })(
                                 <DatePicker
                                     showTime
                                     format={"YYYY-MM-DD HH:mm:ss "}
                                 />
-
                             )}
 
                         </FormItem>
                         <FormItem label={"地址区域"}>
                             {
-                                getFieldDecorator("localarea",{
-
-                                })(
-                                    <TextArea autosize={{ minRows: 3, maxRows: 6 }} placeholder={"请输入地址"}/>
+                                getFieldDecorator("localarea", {})(
+                                    <TextArea autosize={{minRows: 3, maxRows: 6}} placeholder={"请输入地址"}/>
                                 )
                             }
                         </FormItem>
                         <FormItem label={"执行时间"}>
-                            {getFieldDecorator("execTime",{
-                                initialValue:moment("09:30:00","HH:mm:ss")
+                            {getFieldDecorator("execTime", {
+                                initialValue: moment("09:30:00", "HH:mm:ss")
 
                             })(
                                 <DatePicker format={"HH:mm:ss"}/>
@@ -177,28 +212,35 @@ class RegistorFrom extends React.Component {
                         </FormItem>
                         <FormItem {...offsetLayout}>
                             {
-                                getFieldDecorator("isAgree",{
-                                    valuePropName:"checked",
-                                    initialValue:true
+                                getFieldDecorator("isAgree", {
+                                    valuePropName: "checked",
+                                    initialValue: true
                                 })(
                                     <Checkbox>是否同意<a href={"#"}>慕课协议</a></Checkbox>
+                                )
+                            }
+                        </FormItem>
+                        <FormItem label={"用户头像"}>
+                            {
+                                getFieldDecorator("userImg", {})(
+                                    <Upload
+                                        listType="picture-card"
+                                        action={"//jsonplaceholder.typicode.com/posts/"}
+                                        showUploadList={false}
+                                        onChange={this.handleChange}
+                                    >
+                                        {
+                                            this.state.userImg ? <img src={this.state.userImg} alt=""/> : <Icon type="plus"/>
+                                        }
+                                    </Upload>
                                 )
                             }
                         </FormItem>
                         <FormItem {...offsetLayout}>
                             <Button type={"primary"} onClick={this.handleSubmit}>提交</Button>
                         </FormItem>
-                        <FormItem>
-                            {
-                                getFieldDecorator("userImg",{
 
-                                })(
-                                    <Upload>
-                                        <Button type={"primar"}>上传</Button>
-                                    </Upload>
-                                )
-                            }
-                        </FormItem>
+
 
 
                     </Form>
