@@ -14,6 +14,7 @@ import Gallery from './pages/admin/ui/gallery'
 import MyCarousel from './pages/admin/ui/carousel'
 import LoginFrom from './pages/admin/form/login'
 import RegistorFrom from './pages/admin/form/registor'
+import BasicTable from './pages/admin/table/basic';
 
 export default class IRooter extends React.Component {
     render() {
@@ -34,6 +35,7 @@ export default class IRooter extends React.Component {
                             <Route path="/admin/ui/carousel" component={MyCarousel}></Route>
                             <Route path="/admin/form/login" component={LoginFrom}></Route>
                             <Route path="/admin/form/reg" component={RegistorFrom}></Route>
+                            <Route path="/admin/table/basic" component={BasicTable}></Route>
                         </Switch>
                     </Admin>}>
                     </Route>
