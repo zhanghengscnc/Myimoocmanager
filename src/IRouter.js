@@ -16,6 +16,7 @@ import LoginFrom from './pages/admin/form/login'
 import RegistorFrom from './pages/admin/form/registor'
 import BasicTable from './pages/admin/table/basic';
 import AvanceTable from './pages/admin/table/advance';
+import CustomSearch from  './pages/admin/table/customSearch';
 
 export default class IRooter extends React.Component {
     render() {
@@ -38,6 +39,7 @@ export default class IRooter extends React.Component {
                             <Route path="/admin/form/reg" component={RegistorFrom}></Route>
                             <Route path="/admin/table/basic" component={BasicTable}></Route>
                             <Route path="/admin/table/high" component={AvanceTable}></Route>
+                            <Route path="/admin/table/customSearch" component={CustomSearch}></Route>
                         </Switch>
                     </Admin>}>
                     </Route>

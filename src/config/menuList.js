@@ -66,6 +66,10 @@ const menuList = [
             {
                 title: '高级表格',
                 key: '/admin/table/high',
+            },
+            {
+                title: '自定义搜素',
+                key: '/admin/table/customSearch'
             }
         ]
     },
