@@ -1,5 +1,5 @@
 import React from 'react';
-import {Card, Table, message, Modal, Button,Badge} from 'antd';
+import {Card, Table, message, Modal, Button, Badge, Tag} from 'antd';
 import axios from './../../../../axios/index.js';
 import util from './../../../../utils/utils';
 
@@ -32,7 +32,6 @@ export default class AvanceTable extends React.Component {
             }
 
         }).then((resp) => {
-            debugger;
             if (resp.code == 0) {
                 this.setState({
                     dataSource2: resp.tableList,
@@ -102,8 +101,8 @@ export default class AvanceTable extends React.Component {
     handleDelete(item) {
         Modal.confirm({
             title: "确认删除吗？",
-            content:`被删除的id为：${item.id}`,
-            onOk:()=>{
+            content: `被删除的id为：${item.id}`,
+            onOk: () => {
                 this.request();
             }
         })
@@ -112,41 +111,66 @@ export default class AvanceTable extends React.Component {
     handleTableChange = (pagination, filters, sorter) => {
 
         this.setState({
-            order:sorter.order
+            order: sorter.order
         })
     };
+
     render() {
         const columns = [
             {
                 width: 20,
                 title: 'id',
                 dataIndex: 'id',
-                sorter:(a, b) => a.id - b.id,
-                sortOrder:this.state.order
+                sorter: (a, b) => a.id - b.id,
+                sortOrder: this.state.order
             },
             {
                 width: 80,
                 title: '用户名',
-                dataIndex: 'userName'
+                dataIndex: 'userName',
+                onFilter:(value,record)=>record.userName == value
             },
             {
                 width: 80,
                 title: '性别',
                 dataIndex: 'sex',
+                filters: [{
+                    text: "男",
+                    value: "1"
+                }, {
+                    text: "女",
+                    value: "0"
+                }],
+                onFilter: (value, record) =>
+                    record.sex == value,
+                filtered:true,
+
                 render(sex) {
-                    return sex == 1 ? "男" : "女"
+                    let val = sex == 1 ? "男" : "女";
+                    let colorCus
+                    if (val == "男") {
+                        colorCus = 'blue'
+                    } else {
+                        colorCus = 'red'
+                    }
+
+                    return <Tag color={colorCus} key={sex}>{sex == 1 ? "男" : "女"}</Tag>;
                 }
             },
             {
                 width: 80,
                 title: '状态',
                 dataIndex: 'state',
+                sorter:(a,b)=>(
+                    a.state-b.state
+                ),
+                sortOrder:this.state.order,
                 render(state) {
                     let config = {
-                        0: <Badge status="success" text="Success" />,
-                        1: <Badge status="info" text="Info" />,
-                        2: <Badge status="warning" text="warning" />,
-                        3: <Badge status="error" text="error" />
+                        0: <Badge status="success" text="Success"/>,
+                        1: <Badge status="info" text="Info"/>,
+                        2: <Badge status="warning" text="warning"/>,
+                        3: <Badge status="error" text="error"/>
                     }
                     return config[state]
                 }
@@ -172,10 +196,12 @@ export default class AvanceTable extends React.Component {
                 dataIndex: 'time'
             },
             {
-                width:80,
-                title:'操作',
-                render:(text,item) =>{
-                    return <Button size="small" onClick={()=>{this.handleDelete(item)}}>删除</Button>
+                width: 80,
+                title: '操作',
+                render: (text, item) => {
+                    return <Button size="small" onClick={() => {
+                        this.handleDelete(item)
+                    }}>删除</Button>
 
 
                 }
@@ -186,13 +212,13 @@ export default class AvanceTable extends React.Component {
                 width: 20,
                 title: 'id',
                 dataIndex: 'id',
-                fixed:"left"
+                fixed: "left"
             },
             {
                 width: 80,
                 title: '用户名',
                 dataIndex: 'userName',
-                fixed:"left"
+                fixed: "left"
             },
             {
                 width: 80,
@@ -318,7 +344,7 @@ export default class AvanceTable extends React.Component {
                 width: 80,
                 title: '早起时间',
                 dataIndex: 'time',
-                fixed:"right"
+                fixed: "right"
             }
 
         ];
@@ -332,10 +358,15 @@ export default class AvanceTable extends React.Component {
                         dataSource={this.state.dataSource2}
                         rowKey={record => record.id}
                         rowSelection={{
-                            type: "checkbox",
+                            type: 'checkbox',
                             selectedRowKeys: this.state.selectedRowKeys,
                             selectedRows: this.state.selectedRows,
-                            onChange: this.onChangeOfCheckbox
+                            onChange: this.onChangeOfCheckbox,
+                            getCheckboxProps: record => ({
+                                disabled: record.sex == "1",
+                                name: "id双数不能选"
+                            })
+
                         }}
                         pagination={{onChange: this.changeCurrent, ...this.state.pagination}}
                         scroll={{y: 800}}
