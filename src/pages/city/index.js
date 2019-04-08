@@ -1,20 +1,46 @@
 import React from 'react';
-import {Table,Modal,message,Card,Form,Select,Button} from "antd";
+import {Table, Modal, message, Card, Form, Select, Button, Row, Col} from "antd";
 import Utils from './../../utils/utils';
 import axios from './../../axios';
+import './index.less'
+
+
 const FormItem = Form.Item;
 const Option = Select.Option;
 export default class City extends React.Component {
     state = {
-        isShowOpenCity:false,
-        data: []
+        isShowOpenCity: false,
+        list: [],
+        loading: false
     };
+
     componentDidMount() {
         this.request();
     };
 
     request = () => {
-        axios.
+        this.setState({
+            loading: true,
+        })
+        axios.myAxiosCity({
+            url: "/city/list",
+            method: "get"
+        }).then((resp) => {
+            if (resp) {
+                let dataList = resp.data.list.map((item, index) => {
+                        item.key = index
+                        return item
+                    }
+                )
+                this.setState({
+                    list: dataList,
+                    loading: false
+                })
+            }
+        }, (error) => {
+            message.error(error)
+        })
+
 
     };
 
@@ -22,6 +48,7 @@ export default class City extends React.Component {
 
 
     };
+
     render() {
         const columns = [
             {
@@ -45,15 +72,17 @@ export default class City extends React.Component {
             }, {
                 title: '授权加盟商',
                 dataIndex: 'franchisee_name'
-            }, {
+            },
+            /*{
                 title: '城市管理员',
                 dataIndex: 'city_admins',
                 render(arr) {
                     return arr.map((item) => {
-                        return item.user_name;
+                        return item;
                     }).join(',');
                 },
-            }, {
+            }, */
+            {
                 title: '城市开通时间',
                 dataIndex: 'open_time',
                 render: Utils.formateDate
@@ -68,13 +97,9 @@ export default class City extends React.Component {
         ];
         return (
             <div>
+                <FilterForm/>
                 <Button type="primary" onClick={this.handleOpenCity}>开通城市</Button>
-                <Table
-                    columns={columns}
-                    dataSource={this.state.data}
-                    loading = {this.state.loading}
-                    rowKey={record => record.city_id}
-                />
+                <Table columns={columns} dataSource={this.state.list}/>
             </div>
 
         );
@@ -85,86 +110,108 @@ export default class City extends React.Component {
 class FilterForm extends React.Component {
     render() {
         const {getFieldDecorator} = this.props.form;
+        const formLayout = {
+            labelCol: {
+                xs: 24,
+                sm: 2
+            },
+            wrapperCol: {
+                xs: 24,
+                sm: 6
+            }
+        }
         return (
             <div>
-                <Form layout="horizontal">
-
-                    <FormItem label="城市">
-                        {
-                            getFieldDecorator("city_id",
-                            )(
-                                <Select placeholder="全部" style={{
-                                    width:100
-                                }}>
-                                    <Option value="">全部</Option>
-                                    <Option value="1">北京</Option>
-                                    <Option value="2">天津</Option>
-                                    <Option value="3">深圳</Option>
-                                </Select>
-                            )
-                        }
-                    </FormItem>
-                    <FormItem label="用车模式">
-                        {
-                            getFieldDecorator("model")(
-                                <Select style={{width:120}}>
-                                    <Option value="">全部</Option>
-                                    <Option value="1">指定停车点模式</Option>
-                                    <Option value="2">禁停区模式</Option>
-                                </Select>
-                            )
-                        }
-                    </FormItem>
-                    <FormItem label="营运模式">
-                        {
-                            getFieldDecorator('op_mode')(
-                                <Select
-                                    style={{width: 80}}
-                                    placeholder="全部"
-                                >
-                                    <Option value="">全部</Option>
-                                    <Option value="1">自营</Option>
-                                    <Option value="2">加盟</Option>
-                                </Select>
-                            )
-                        }
-                    </FormItem>
-                    <FormItem label="加盟商授权状态">
-                        {
-                            getFieldDecorator('auth_status')(
-                                <Select
-                                    style={{width: 100}}
-                                    placeholder="全部"
-                                >
-                                    <Option value="">全部</Option>
-                                    <Option value="1">已授权</Option>
-                                    <Option value="2">未授权</Option>
-                                </Select>
-                            )
-                        }
-                    </FormItem>
-                    <FormItem>
-                        <Button type="primary">查询</Button>
-                        <Button>重置</Button>
-                    </FormItem>
+                <Form layout="inline">
+                    <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+                        <Col md={8} sm={24}>
+                        <FormItem label="城市">
+                            {
+                                getFieldDecorator("city_id",
+                                )(
+                                    <Select placeholder="全部" style={{width:'100%'}}>
+                                        <Option value="">全部</Option>
+                                        <Option value="1">北京</Option>
+                                        <Option value="2">天津</Option>
+                                        <Option value="3">深圳</Option>
+                                    </Select>
+                                )
+                            }
+                        </FormItem>
+                        </Col>
+                        <Col md={8} sm={24}>
+                        <FormItem label="用车模式">
+                            {
+                                getFieldDecorator("model")(
+                                    <Select style={{width:'100%'}}>
+                                        <Option value="">全部</Option>
+                                        <Option value="1">指定停车点模式</Option>
+                                        <Option value="2">禁停区模式</Option>
+                                    </Select>
+                                )
+                            }
+                        </FormItem>
+                        </Col>
+                        <Col md={8} sm={24}>
+                        <FormItem label="营运模式">
+                            {
+                                getFieldDecorator('op_mode')(
+                                    <Select
+                                        style={{width:'100%'}}
+                                        placeholder="全部"
+                                    >
+                                        <Option value="">全部</Option>
+                                        <Option value="1">自营</Option>
+                                        <Option value="2">加盟</Option>
+                                    </Select>
+                                )
+                            }
+                        </FormItem>
+                        </Col>
+                    </Row>
+                    <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+                        <Col span={8}>
+                        <FormItem label="加盟商授权状态">
+                            {
+                                getFieldDecorator('auth_status')(
+                                    <Select
+                                        style={{width:'100%'}}
+                                        placeholder="全部"
+                                    >
+                                        <Option value="">全部</Option>
+                                        <Option value="1">已授权</Option>
+                                        <Option value="2">未授权</Option>
+                                    </Select>
+                                )
+                            }
+                        </FormItem>
+                        </Col>
+                        <Col span={8}>
+                        <FormItem>
+                            <Button type="primary">查询</Button>
+                            <Button>重置</Button>
+                        </FormItem>
+                        </Col>
+                    </Row>
                 </Form>
             </div>
         );
     }
 
 }
+
 FilterForm = Form.create({})(FilterForm);
 
 class OpenCityForm extends React.Component {
 
     render() {
-        const {getFieldDecorator}  = this.props.form;
+        const {getFieldDecorator} = this.props.form;
         const formItemLayout = {
-            labelCol:{
-                span:5
+            labelCol: {
+                span: 5
             },
-            wrapperCol:{
-                span:19
+            wrapperCol: {
+                span: 19
             }
 
         }
@@ -172,8 +219,8 @@ class OpenCityForm extends React.Component {
             <div>
                 <FormItem label="开通城市">
                     {
-                        getFieldDecorator("city_id",{
-                            initialValue:'1'
+                        getFieldDecorator("city_id", {
+                            initialValue: '1'
                         })(
                             <Select style={{width: 100}}>
                                 <Option value="">全部</Option>

@@ -21,6 +21,8 @@ import ExtendsRow from  './pages/admin/table/ExtendsRow';
 //import MergeCell from  './pages/admin/table/MergeCell';
 import HeaderGroup from  './pages/admin/table/headerGroup';
 import Home from './pages/home';
+import City from './pages/city';
+
 
 
 export default class IRooter extends React.Component {
@@ -49,6 +51,7 @@ export default class IRooter extends React.Component {
                             <Route path="/admin/table/extendsRow" component={ExtendsRow}></Route>
                            {/*// <Route path="/admin/table/mergeCell" component={MergeCell}></Route>*/}
                             <Route path="/admin/table/headerGroup" component={HeaderGroup}></Route>
+                            <Route path="/admin/city" component={City}></Route>
                         </Switch>
                     </Admin>}>
                     </Route>
