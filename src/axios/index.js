@@ -1,5 +1,6 @@
 import JsonP from 'jsonp';
 import axios from 'axios';
+import {message} from 'antd';
 
 export default class Axios {
 
@@ -21,10 +22,10 @@ export default class Axios {
             loading = document.getElementById('ajaxLoading');
             loading.style = "display: none;";
         }
-       /* if (options.data && options.data.isShowLoading !== false) {
-            let loading = document.getElementById("ajaxLoading");
-            loading.style.display = 'block';
-        }*/
+        /* if (options.data && options.data.isShowLoading !== false) {
+             let loading = document.getElementById("ajaxLoading");
+             loading.style.display = 'block';
+         }*/
         return new Promise((resolve, reject) => {
             let baseUrl = " https://www.easy-mock.com/mock/5c9ef26249b4a96ba1da0441/imook";
             axios(
@@ -50,6 +51,28 @@ export default class Axios {
             })
         });
 
+    };
+
+    static myAjax(Options) {
+        return new Promise((resolve,reject)=>{
+            const baseUrl = "";
+            axios({
+                    baseUrl: baseUrl,
+                    url: Options.url,
+                    method: Options.method,
+                    data: {
+                        ...Options.params
+                    }
+                }
+            ).then((resp)=>{
+                if (resp.status == '200') {
+                    resolve(resp)
+                }else{
+                    message.error(resp.status);
+                }
+            });
+        });
+        
     }
 
     static myAxios(options) {
