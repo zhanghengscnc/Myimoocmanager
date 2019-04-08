@@ -52,4 +52,23 @@ export default class Axios {
 
     }
 
+    static myAxios(options) {
+        let baseUrl = "https://www.easy-mock.com/mock/5c9ef26249b4a96ba1da0441/imook";
+        return new Promise((resolve, reject)=>{
+            axios({
+                baseURL:baseUrl,
+                url:options.url,
+                method:options.method,
+                timeout:5000,
+                params: (options.data && options.param) || ""
+            }).then((resp)=>{
+                if (resp.status == 200 && resp.data.tableList) {
+                    resolve(resp.data);
+                }else {
+                    reject(resp)
+                }
+            })
+        });
+    }
+
 }

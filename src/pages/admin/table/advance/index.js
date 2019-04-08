@@ -40,7 +40,6 @@ export default class AvanceTable extends React.Component {
                 })
             }
         }, (resp) => {
-            debugger;
             message.error("返回数据出错：" + resp.message)
         });
     };

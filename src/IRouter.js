@@ -17,6 +17,11 @@ import RegistorFrom from './pages/admin/form/registor'
 import BasicTable from './pages/admin/table/basic';
 import AvanceTable from './pages/admin/table/advance';
 import CustomSearch from  './pages/admin/table/customSearch';
+import ExtendsRow from  './pages/admin/table/ExtendsRow';
+//import MergeCell from  './pages/admin/table/MergeCell';
+import HeaderGroup from  './pages/admin/table/headerGroup';
+import Home from './pages/home';
+
 
 export default class IRooter extends React.Component {
     render() {
@@ -27,6 +32,7 @@ export default class IRooter extends React.Component {
                     <Route path="/order/detail" component={}></Route>*/}
                     <Route path="/admin" render={() => <Admin>
                         <Switch>
+                            <Route path="/admin/home" component={Home}></Route>
                             <Route path="/admin/ui/buttons" component={Buttons}></Route>
                             <Route path="/admin/ui/modals" component={Modals}></Route>
                             <Route path="/admin/ui/loadings" component={Loadings}></Route>
@@ -40,6 +46,9 @@ export default class IRooter extends React.Component {
                             <Route path="/admin/table/basic" component={BasicTable}></Route>
                             <Route path="/admin/table/high" component={AvanceTable}></Route>
                             <Route path="/admin/table/customSearch" component={CustomSearch}></Route>
+                            <Route path="/admin/table/extendsRow" component={ExtendsRow}></Route>
+                           {/*// <Route path="/admin/table/mergeCell" component={MergeCell}></Route>*/}
+                            <Route path="/admin/table/headerGroup" component={HeaderGroup}></Route>
                         </Switch>
                     </Admin>}>
                     </Route>

@@ -1,20 +1,21 @@
 import React from 'react';
-import {Card, Table, message, Modal, Button, Badge,Input,Icon,Tag} from 'antd';
-import Highlighter from 'react-highlight-words';
+import {Card, Table, message, Modal, Button, Badge, Tag, Icon} from 'antd';
 import axios from './../../../../axios/index.js';
-import util from './../../../../utils/utils';
 
-export default class CustomSearch extends React.Component {
+export default class HeaderGroup extends React.Component {
     state = {
-        data:[],
-        loading:false
+        data: [],
+
+        sortedInfo:null,
+        filteredInfo:null
+
     };
 
     componentDidMount() {
         this.request();
     }
-    request = () => {
 
+    request = () => {
         const options = {
             url: "/table/list",
             method: "get",
@@ -24,92 +25,45 @@ export default class CustomSearch extends React.Component {
                 }
             }
         };
-        this.setState({
-            loading:true
-        });
         axios.myAxios(options).then(
-
             (resp) => {
                 this.setState({
-                    data: resp.tableList,
-                    loading:false
+                    data: resp.tableList
                 })
             },
             (resp) => {
                 message.error("请求错误：" + resp.code)
             }
         )
+    };
+    handleTableChange (pagination, filters, sorter) {
+        console.log(filters, sorter)
+        this.setState({
+            filteredInfo:filters,
+            sortedInfo:sorter
+        })
+
     }
-    getColumnSearchProps = (dataIndex) => ({
-        filterDropdown: ({
-                             setSelectedKeys, selectedKeys, confirm, clearFilters,
-                         }) => (
-            <div style={{padding: 8}}>
-                <Input
-                    ref={node => {
-                        this.searchInput = node;
-                    }}
-                    placeholder={`Search ${dataIndex}`}
-                    value={selectedKeys[0]}
-                    onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-                    onPressEnter={() => this.handleSearch(selectedKeys, confirm)}
-                    style={{width: 188, marginBottom: 8, display: 'block'}}
-                />
-                <Button
-                    type="primary"
-                    onClick={() => this.handleSearch(selectedKeys, confirm)}
-                    icon="search"
-                    size="small"
-                    style={{width: 90, marginRight: 8}}
-                >
-                    Search
-                </Button>
-                <Button
-                    onClick={() => this.handleReset(clearFilters)}
-                    size="small"
-                    style={{width: 90}}
-                >
-                    Reset
-                </Button>
-            </div>
-        ),
-        filterIcon: filtered => <Icon type="search" style={{color: filtered ? '#1890ff' : undefined}}/>,
-        onFilter: (value, record) => record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
-        onFilterDropdownVisibleChange: (visible) => {
-            if (visible) {
-                setTimeout(() => this.searchInput.select());
-            }
-        },
-        render: (text) => (
-            <Highlighter
-                highlightStyle={{backgroundColor: '#ffc069', padding: 0}}
-                searchWords={[this.state.searchText]}
-                autoEscape
-                textToHighlight={text.toString()}
-            />
-        ),
-    });
 
-    handleSearch = (selectedKeys, confirm) => {
-        confirm();
-        this.setState({searchText: selectedKeys[0]});
-    };
-
-    handleReset = (clearFilters) => {
-        clearFilters();
-        this.setState({searchText: ''});
-    };
+    hancleClearFilterSorter=() =>{
+        this.setState({
+            filteredInfo:null,
+            sortedInfo:null
+        })
+    }
 
     render() {
-                 const columns = [
+        let {filteredInfo,sortedInfo} = this.state;
+        sortedInfo = sortedInfo || {};
+        filteredInfo = filteredInfo || {};
+        const columns = [
             {
                 width: 20,
                 title: 'id',
                 dataIndex: 'id',
                 key: 'id',
                 sorter: (a, b) => a.id - b.id,
-                ...this.getColumnSearchProps("id")
-                //sortOrder: this.state.idSortOrder,
+                sortOrder: sortedInfo.columnKey === 'id' && sortedInfo.order,
             },
             {
                 width: 80,
@@ -136,6 +90,7 @@ export default class CustomSearch extends React.Component {
                         onFilter: (value, record) =>
                             record.sex == value,
                         filtered: true,
+                        filteredValue: filteredInfo.sex || null,
 
                         render(sex) {
                             let val = sex == 1 ? "男" : "女";
@@ -157,7 +112,7 @@ export default class CustomSearch extends React.Component {
                         sorter: (a, b) => (
                             a.state - b.state
                         ),
-                        //sortOrder: this.state.stateSortOrder,
+                        sortOrder: sortedInfo.columnKey === 'state' && sortedInfo.order,
                         render(state) {
                             let config = {
                                 0: <Badge status="success" text="Success"/>,
@@ -258,14 +213,15 @@ export default class CustomSearch extends React.Component {
         ];
         return (
             <div>
-                <Card title="表头分组" style={{marginTop: 10}}>
+
+                <Card title="表头分组3" style={{marginTop: 10}}>
+                    <div><Button type="primary" onClick={this.hancleClearFilterSorter}>清除</Button></div>
                     <Table columns={columns} dataSource={this.state.data} bordered sortDirection={['ascend','descend']}
-                           loading = {this.state.loading}
 
-                        //onChange={this.handleTableChange.bind(this)}
+                           onChange={this.handleTableChange.bind(this)}
                            rowKey={record => record.id}
-
-                    />;
+                           header
+                           />;
                 </Card>
             </div>
         );

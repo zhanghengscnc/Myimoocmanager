@@ -70,7 +70,20 @@ const menuList = [
             {
                 title: '自定义搜素',
                 key: '/admin/table/customSearch'
+            },
+            {
+                title: '扩展表格',
+                key: '/admin/table/extendsRow'
+            },
+            {
+                title: '合并表格',
+                key: '/admin/table/mergeCell'
+            },
+            {
+                title: "表头分组",
+                key: '/admin/table/headerGroup'
             }
+
         ]
     },
     {
