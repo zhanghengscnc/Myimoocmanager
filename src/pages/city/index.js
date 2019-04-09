@@ -44,6 +44,7 @@ export default class City extends React.Component {
 
     };
 
+
     handleOpenCity = () => {
 
 
@@ -73,7 +74,7 @@ export default class City extends React.Component {
                 title: '授权加盟商',
                 dataIndex: 'franchisee_name'
             },
-            /*{
+            {
                 title: '城市管理员',
                 dataIndex: 'city_admins',
                 render(arr) {
@@ -81,7 +82,7 @@ export default class City extends React.Component {
                         return item;
                     }).join(',');
                 },
-            }, */
+            },
             {
                 title: '城市开通时间',
                 dataIndex: 'open_time',
@@ -108,6 +109,13 @@ export default class City extends React.Component {
 };
 
 class FilterForm extends React.Component {
+    handleSearch = () => {
+        this.props.form.validateFields((err, values)=>{
+            if (!err) {
+                Modal.info(values)
+            }
+        })
+    };
     render() {
         const {getFieldDecorator} = this.props.form;
         const formLayout = {
@@ -122,14 +130,16 @@ class FilterForm extends React.Component {
         }
         return (
             <div>
-                <Form layout="inline">
+                <Form  layout="inline">
                     <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
                         <Col md={8} sm={24}>
                         <FormItem label="城市">
                             {
                                 getFieldDecorator("city_id",
                                 )(
-                                    <Select placeholder="全部" style={{width:'100%'}}>
+                                    <Select placeholder="全部"
+                                        className='block'
+                                    >
                                         <Option value="">全部</Option>
                                         <Option value="1">北京</Option>
                                         <Option value="2">天津</Option>
@@ -143,7 +153,7 @@ class FilterForm extends React.Component {
                         <FormItem label="用车模式">
                             {
                                 getFieldDecorator("model")(
-                                    <Select style={{width:'100%'}}>
+                                    <Select >
                                         <Option value="">全部</Option>
                                         <Option value="1">指定停车点模式</Option>
                                         <Option value="2">禁停区模式</Option>
@@ -157,7 +167,6 @@ class FilterForm extends React.Component {
                             {
                                 getFieldDecorator('op_mode')(
                                     <Select
-                                        style={{width:'100%'}}
                                         placeholder="全部"
                                     >
                                         <Option value="">全部</Option>
@@ -169,13 +178,13 @@ class FilterForm extends React.Component {
                         </FormItem>
                         </Col>
                     </Row>
-                    <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-                        <Col span={8}>
+                    <Row >
+                        <Col md={8} sm={24}>
                         <FormItem label="加盟商授权状态">
                             {
                                 getFieldDecorator('auth_status')(
                                     <Select
-                                        style={{width:'100%'}}
+                                       // style={{width:'100%'}}
                                         placeholder="全部"
                                     >
                                         <Option value="">全部</Option>
@@ -186,11 +195,11 @@ class FilterForm extends React.Component {
                             }
                         </FormItem>
                         </Col>
-                        <Col span={8}>
-                        <FormItem>
-                            <Button type="primary">查询</Button>
+                        <Col md={8} sm={24}>
+                        {<FormItem>
+                            <Button type="primary" onClick={this.handleSearch}>查询</Button>
                             <Button>重置</Button>
-                        </FormItem>
+                        </FormItem>}
                         </Col>
                     </Row>
                 </Form>
