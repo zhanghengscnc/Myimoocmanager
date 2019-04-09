@@ -46,8 +46,18 @@ export default class City extends React.Component {
 
 
     handleOpenCity = () => {
-
-
+        this.setState({
+            isShowOpenCity:true
+        })
+    };
+    handleOpenCityCancel =()=>{
+        this.setState({
+            isShowOpenCity:false
+        })
+    };
+    handleOpenCityOk = () =>{
+        let openCityInfo = this.cityForm.props.form.getFieldsValue();
+        Modal.info({content:JSON.stringify(openCityInfo)});
     };
 
     render() {
@@ -98,9 +108,17 @@ export default class City extends React.Component {
         ];
         return (
             <div>
-                <FilterForm/>
+                <FilterForm wrappedComponentRef={inst => this.filterForm = inst}/>
                 <Button type="primary" onClick={this.handleOpenCity}>开通城市</Button>
                 <Table columns={columns} dataSource={this.state.list}/>
+                <Modal
+                    title="开通城市"
+                    onOk={this.handleOpenCityOk}
+                    onCancel={this.handleOpenCityCancel}
+                    visible={this.state.isShowOpenCity}
+                >
+                    <MyOpenCityForm wrappedComponentRef={(inst) => this.cityForm = inst}/>
+                </Modal>
             </div>
 
         );
@@ -112,7 +130,7 @@ class FilterForm extends React.Component {
     handleSearch = () => {
         this.props.form.validateFields((err, values)=>{
             if (!err) {
-                Modal.info(values)
+                Modal.info({content:JSON.stringify(values)})
             }
         })
     };
@@ -120,17 +138,15 @@ class FilterForm extends React.Component {
         const {getFieldDecorator} = this.props.form;
         const formLayout = {
             labelCol: {
-                xs: 24,
-                sm: 2
+                span:2
             },
             wrapperCol: {
-                xs: 24,
-                sm: 6
+                span:6
             }
-        }
+        };
         return (
             <div>
-                <Form  layout="inline">
+                <Form  layout="inline" {...formLayout}>
                     <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
                         <Col md={8} sm={24}>
                         <FormItem label="城市">
@@ -268,5 +284,4 @@ class OpenCityForm extends React.Component {
         );
     }
 }
-
-OpenCityForm = Form.create({})(OpenCityForm);
+const MyOpenCityForm = Form.create({})(OpenCityForm);

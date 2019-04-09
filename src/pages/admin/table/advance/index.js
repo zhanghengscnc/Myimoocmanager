@@ -32,7 +32,7 @@ export default class AvanceTable extends React.Component {
             }
 
         }).then((resp) => {
-            if (resp.code == 0) {
+            if (resp.code === 0) {
                 this.setState({
                     dataSource2: resp.tableList,
                     //从服务器返回分页器属性
