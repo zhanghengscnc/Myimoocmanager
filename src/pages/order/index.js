@@ -1,5 +1,5 @@
 import React from 'react';
-import {Form, Table, Card, Row, Col,Select,Button,DatePicker} from 'antd';
+import {Form, Table, Card, Row, Col,Select,Button,DatePicker,Modal} from 'antd';
 import axios from './../../axios';
 import './../../style/common.less'
 
@@ -43,10 +43,29 @@ export default class order extends React.Component {
         let selectedRowKeys = this.state.selectedRowKeys;
         return{
             onDoubleClick:(e)=>{
-                console.log(record)
-                console.log(selectedRowKeys)
+                let position = selectedRowKeys.indexOf(record.id);
+                if (position > -1) {
+                    selectedRowKeys.splice(position, 1);
+                }else {
+                    selectedRowKeys.push(record.id);
+                }
+                this.setState({
+                    selectedRowKeys
+                })
             }
         }
+    };
+    openOrderDetail = () =>{
+        let keys = this.state.selectedRowKeys;
+        if (!keys||keys.length !== 1) {
+            Modal.info({
+                title: "操作错误",
+                content: "请选择一条数据进行查看"
+            });
+        } else {
+            window.open("/#/common/order/detail:"+ keys[0],"_blank");
+        }
+
     }
     render() {
         const columns = [{
@@ -101,7 +120,7 @@ export default class order extends React.Component {
                     <FilterForm wrappedComponent={(inst) =>this.filterForm = inst}/>
                 </Card>
                 <Card>
-                    <Button type="primary" style={{marginLeft:10 ,marginBottom:10}}>订单详情</Button>
+                    <Button type="primary" style={{marginLeft:10 ,marginBottom:10}} onClick={this.openOrderDetail}>订单详情</Button>
                     <Button type="primary" style={{marginLeft:10,marginBottom:10}}>结束订单</Button>
                     <Table
                         columns={columns}
@@ -126,7 +145,7 @@ class FilterForm extends React.Component {
         return(
             <div>
                 <Form layout="inline" className="ant-advanced-search-form">
-                    <Row gutter={{sm:8,md:24}}>
+                    <Row gutter={{xs:4,sm:8,md:24}}>
                         <Col md={6} sm={24}>
                             <FormItem label="城市">
                                 {

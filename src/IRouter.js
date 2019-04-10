@@ -24,6 +24,7 @@ import Home from './pages/home';
 import City from './pages/city';
 import Order from './pages/order';
 import Common from './common'
+import  OrderDetail from './pages/order/detail';
 
 
 
@@ -38,34 +39,34 @@ export default class IRooter extends React.Component {
                     <Route path="/order/detail" component={}></Route>*/}
                     <Route path="/admin" render={() => <Admin>
                         <Switch>
-                            <Route path="/admin/home" component={Home}></Route>
-                            <Route path="/admin/ui/buttons" component={Buttons}></Route>
-                            <Route path="/admin/ui/modals" component={Modals}></Route>
-                            <Route path="/admin/ui/loadings" component={Loadings}></Route>
-                            <Route path="/admin/ui/notification" component={Notification}></Route>
-                            <Route path="/admin/ui/messages" component={Message}></Route>
-                            <Route path="/admin/ui/tabs" component={MyTabs}></Route>
-                            <Route path="/admin/ui/gallery" component={Gallery}></Route>
-                            <Route path="/admin/ui/carousel" component={MyCarousel}></Route>
-                            <Route path="/admin/form/login" component={LoginFrom}></Route>
-                            <Route path="/admin/form/reg" component={RegistorFrom}></Route>
-                            <Route path="/admin/table/basic" component={BasicTable}></Route>
-                            <Route path="/admin/table/high" component={AvanceTable}></Route>
-                            <Route path="/admin/table/customSearch" component={CustomSearch}></Route>
-                            <Route path="/admin/table/extendsRow" component={ExtendsRow}></Route>
+                            <Route path="/admin/home" component={Home}/>
+                            <Route path="/admin/ui/buttons" component={Buttons}/>
+                            <Route path="/admin/ui/modals" component={Modals}/>
+                            <Route path="/admin/ui/loadings" component={Loadings}/>
+                            <Route path="/admin/ui/notification" component={Notification}/>
+                            <Route path="/admin/ui/messages" component={Message}/>
+                            <Route path="/admin/ui/tabs" component={MyTabs}/>
+                            <Route path="/admin/ui/gallery" component={Gallery}/>
+                            <Route path="/admin/ui/carousel" component={MyCarousel}/>
+                            <Route path="/admin/form/login" component={LoginFrom}/>
+                            <Route path="/admin/form/reg" component={RegistorFrom}/>
+                            <Route path="/admin/table/basic" component={BasicTable}/>
+                            <Route path="/admin/table/high" component={AvanceTable}/>
+                            <Route path="/admin/table/customSearch" component={CustomSearch}/>
+                            <Route path="/admin/table/extendsRow" component={ExtendsRow}/>
                            {/*// <Route path="/admin/table/mergeCell" component={MergeCell}></Route>*/}
-                            <Route path="/admin/table/headerGroup" component={HeaderGroup}></Route>
-                            <Route path="/admin/city" component={City}></Route>
-                            <Route path="/admin/order" component={Order}></Route>
+                            <Route path="/admin/table/headerGroup" component={HeaderGroup}/>
+                            <Route path="/admin/city" component={City}/>
+                            <Route path="/admin/order" component={Order}/>
                         </Switch>
                     </Admin>}>
                     </Route>
                     <Route path="/common" render={()=>
                         <Common>
-                            <Route path="/common/order/detail"></Route>
+                            <Route path="/common/order/detail:id" component={OrderDetail}/>
                         </Common>
-                    }></Route>
-                    <Route component={NoMatched}></Route>
+                    }/>
+                    <Route component={NoMatched}/>
 
                 </App>
             </Router>
