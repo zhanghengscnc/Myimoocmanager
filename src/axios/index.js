@@ -7,7 +7,7 @@ export default class Axios {
     static jsonp(data) {
         return new Promise((resolve, reject) => {
             JsonP(data.url, data.options, function (err, resp) {
-                if (resp.status == 'success') {
+                if (resp.status && resp.status == 'success') {
                     resolve(resp);
                 } else {
                     reject(resp);
@@ -27,7 +27,7 @@ export default class Axios {
              loading.style.display = 'block';
          }*/
         return new Promise((resolve, reject) => {
-            let baseUrl = " https://www.easy-mock.com/mock/5c9ef26249b4a96ba1da0441/imook";
+            let baseUrl = "https://www.easy-mock.com/mock/5c9ef26249b4a96ba1da0441/imook";
             axios(
                 {
                     url: options.url,
@@ -54,40 +54,40 @@ export default class Axios {
     };
 
     static myAjax(Options) {
-        return new Promise((resolve,reject)=>{
-            const baseUrl = "";
+        return new Promise((resolve, reject) => {
+            let baseUrl = "https://www.easy-mock.com/mock/5c9ef26249b4a96ba1da0441/imook";
             axios({
-                    baseUrl: baseUrl,
+                    baseURL: baseUrl,
                     url: Options.url,
                     method: Options.method,
-                    data: {
-                        ...Options.params
+                    parms: {
+                        ...Options.data.params
                     }
                 }
-            ).then((resp)=>{
+            ).then((resp) => {
                 if (resp.status == '200') {
                     resolve(resp)
-                }else{
+                } else {
                     message.error(resp.status);
                 }
             });
         });
-        
+
     }
 
     static myAxios(options) {
         let baseUrl = "https://www.easy-mock.com/mock/5c9ef26249b4a96ba1da0441/imook";
-        return new Promise((resolve, reject)=>{
+        return new Promise((resolve, reject) => {
             axios({
-                baseURL:baseUrl,
-                url:options.url,
-                method:options.method,
-                timeout:5000,
+                baseURL: baseUrl,
+                url: options.url,
+                method: options.method,
+                timeout: 5000,
                 params: (options.data && options.param) || ""
-            }).then((resp)=>{
+            }).then((resp) => {
                 if (resp.status == 200 && resp.data.tableList) {
                     resolve(resp.data);
-                }else {
+                } else {
                     reject(resp)
                 }
             })
@@ -96,21 +96,41 @@ export default class Axios {
 
     static myAxiosCity(options) {
         let baseUrl = "https://www.easy-mock.com/mock/5c9ef26249b4a96ba1da0441/imook";
-        return new Promise((resolve, reject)=>{
+        return new Promise((resolve, reject) => {
             axios({
-                baseURL:baseUrl,
-                url:options.url,
-                method:options.method,
-                timeout:5000,
+                baseURL: baseUrl,
+                url: options.url,
+                method: options.method,
+                timeout: 5000,
                 params: (options.data && options.param) || ""
-            }).then((resp)=>{
+            }).then((resp) => {
                 if (resp.status == 200 && resp.data) {
                     resolve(resp);
-                }else {
+                } else {
                     reject(resp.status)
                 }
             })
         });
+    }
+
+    static commonAxios(options) {
+        let baseUrl = "https://www.easy-mock.com/mock/5c9ef26249b4a96ba1da0441/imook";
+        return new Promise((resolve,reject)=>{
+            axios({
+                baseURL: baseUrl,
+                url: options.url,
+                method: options.method ? options.method : "get",
+                params: (options.data && options.data.params) || ""
+            }).then((resp)=>{
+                if (resp.status == 200) {
+                    resolve(resp.data)
+                } else {
+                    message.error(`发送错误：${resp.status}:${resp.statusText}`)
+                }
+            })
+        })
+
+
     }
 
 }

@@ -22,6 +22,10 @@ import ExtendsRow from  './pages/admin/table/ExtendsRow';
 import HeaderGroup from  './pages/admin/table/headerGroup';
 import Home from './pages/home';
 import City from './pages/city';
+import Order from './pages/order';
+import Common from './common'
+
+
 
 
 
@@ -52,10 +56,15 @@ export default class IRooter extends React.Component {
                            {/*// <Route path="/admin/table/mergeCell" component={MergeCell}></Route>*/}
                             <Route path="/admin/table/headerGroup" component={HeaderGroup}></Route>
                             <Route path="/admin/city" component={City}></Route>
+                            <Route path="/admin/order" component={Order}></Route>
                         </Switch>
                     </Admin>}>
                     </Route>
-
+                    <Route path="/common" render={()=>
+                        <Common>
+                            <Route path="/common/order/detail"></Route>
+                        </Common>
+                    }></Route>
                     <Route component={NoMatched}></Route>
 
                 </App>

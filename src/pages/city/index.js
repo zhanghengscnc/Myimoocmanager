@@ -57,7 +57,28 @@ export default class City extends React.Component {
     };
     handleOpenCityOk = () =>{
         let openCityInfo = this.cityForm.props.form.getFieldsValue();
-        Modal.info({content:JSON.stringify(openCityInfo)});
+        //Modal.info({content:JSON.stringify(openCityInfo)});
+        axios.myAjax({
+            url: "/city/openCity",
+            method: "get",
+            data:{
+                params:{
+                    userId:openCityInfo
+                }
+            }
+        }).then((resp)=>{
+            if (resp.status == 200) {
+                Modal.info({
+                    title: "开通成功",
+                    content:JSON.stringify(resp.data.message)
+                })
+                this.setState({
+                    isShowOpenCity:false
+                })
+            }
+        })
+        this.request();
+
     };
 
     render() {
@@ -109,7 +130,7 @@ export default class City extends React.Component {
         return (
             <div>
                 <FilterForm wrappedComponentRef={inst => this.filterForm = inst}/>
-                <Button type="primary" onClick={this.handleOpenCity}>开通城市</Button>
+                <Button type="primary" style={{marginTop:10 ,marginBottom:10}} onClick={this.handleOpenCity}>开通城市</Button>
                 <Table columns={columns} dataSource={this.state.list}/>
                 <Modal
                     title="开通城市"
@@ -134,6 +155,9 @@ class FilterForm extends React.Component {
             }
         })
     };
+    resetSearchForm = () => {
+        this.props.form.resetFields()
+    };
     render() {
         const {getFieldDecorator} = this.props.form;
         const formLayout = {
@@ -146,15 +170,15 @@ class FilterForm extends React.Component {
         };
         return (
             <div>
-                <Form  layout="inline" {...formLayout}>
-                    <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+                <Form  layout="inline" className="ant-advanced-search-form">
+                    <Row gutter={{sm:8,md:24}}>
                         <Col md={8} sm={24}>
                         <FormItem label="城市">
                             {
                                 getFieldDecorator("city_id",
                                 )(
                                     <Select placeholder="全部"
-                                        className='block'
+                                            style={{width:'100%'}}
                                     >
                                         <Option value="">全部</Option>
                                         <Option value="1">北京</Option>
@@ -194,7 +218,7 @@ class FilterForm extends React.Component {
                         </FormItem>
                         </Col>
                     </Row>
-                    <Row >
+                    {<Row gutter={{sm:8,md:24}}>
                         <Col md={8} sm={24}>
                         <FormItem label="加盟商授权状态">
                             {
@@ -212,12 +236,14 @@ class FilterForm extends React.Component {
                         </FormItem>
                         </Col>
                         <Col md={8} sm={24}>
+                        </Col>
+                        <Col md={8} sm={24}>
                         {<FormItem>
-                            <Button type="primary" onClick={this.handleSearch}>查询</Button>
-                            <Button>重置</Button>
+                            <Button type="primary" onClick={this.handleSearch} style={{marginRight:20}}>查询</Button>
+                            <Button onClick={this.resetSearchForm}>重置</Button>
                         </FormItem>}
                         </Col>
-                    </Row>
+                    </Row>}
                 </Form>
             </div>
         );
@@ -242,12 +268,13 @@ class OpenCityForm extends React.Component {
         }
         return (
             <div>
+                <Form layout="horizontal" {...formItemLayout}>
                 <FormItem label="开通城市">
                     {
                         getFieldDecorator("city_id", {
                             initialValue: '1'
                         })(
-                            <Select style={{width: 100}}>
+                            <Select >
                                 <Option value="">全部</Option>
                                 <Option value="1">北京市</Option>
                                 <Option value="2">天津市</Option>
@@ -255,12 +282,12 @@ class OpenCityForm extends React.Component {
                         )
                     }
                 </FormItem>
-                <FormItem label="营运模式"  {...formItemLayout}>
+                <FormItem label="营运模式">
                     {
                         getFieldDecorator('op_mode', {
                             initialValue: '1'
                         })(
-                            <Select style={{width: 100}}>
+                            <Select >
                                 <Option value="1">自营</Option>
                                 <Option value="2">加盟</Option>
                             </Select>
@@ -268,18 +295,19 @@ class OpenCityForm extends React.Component {
                     }
 
                 </FormItem>
-                <FormItem label="用车模式"  {...formItemLayout}>
+                <FormItem label="用车模式">
                     {
                         getFieldDecorator('use_mode', {
                             initialValue: '1'
                         })(
-                            <Select style={{width: 100}}>
+                            <Select >
                                 <Option value="1">指定停车点</Option>
                                 <Option value="2">禁停区</Option>
                             </Select>
                         )
                     }
                 </FormItem>
+                </Form>
             </div>
         );
     }
