@@ -63,7 +63,8 @@ export default class order extends React.Component {
                 content: "请选择一条数据进行查看"
             });
         } else {
-            window.open("/#/common/order/detail:"+ keys[0],"_blank");
+            //新开页面,传递参数
+            window.open("/#/common/order/detail/"+ keys[0],"_blank");
         }
 
     }

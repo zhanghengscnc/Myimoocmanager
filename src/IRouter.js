@@ -61,11 +61,12 @@ export default class IRooter extends React.Component {
                         </Switch>
                     </Admin>}>
                     </Route>
-                    <Route path="/common" render={()=>
-                        <Common>
-                            <Route path="/common/order/detail:id" component={OrderDetail}/>
-                        </Common>
-                    }/>
+                    <Route path="/common" render={() => {
+                        return <Common>
+                            <Route path="/common/order/detail/:id" component={OrderDetail}/>
+                        </Common>;
+                    }}
+                    />
                     <Route component={NoMatched}/>
 
                 </App>
